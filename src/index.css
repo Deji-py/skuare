@@ -1,0 +1,40 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  margin: 0;
+  padding: 0;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+a {
+  text-decoration: none;
+  cursor: default;
+}
+
+.loading {
+  background-color: gray;
+  animation-name: glow;
+  animation-duration: 1s;
+  animation-fill-mode: forwards;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+}
+
+@keyframes glow {
+  0% {
+    background-color: rgba(202, 201, 201, 0.5);
+  }
+  50% {
+    background-color: rgba(170, 170, 170, 0.5);
+  }
+  100% {
+    background-color: rgba(161, 160, 160, 0.5);
+  }
+}

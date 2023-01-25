@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1173" height="711" viewBox="0 0 1173 711">
+  <defs>
+    <linearGradient id="linear-gradient" x1="1.006" y1="0.492" x2="-0.004" y2="0.505" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#ef107a"/>
+      <stop offset="0.369" stop-color="#f73054"/>
+      <stop offset="1" stop-color="#ff502e"/>
+    </linearGradient>
+    <linearGradient id="linear-gradient-2" x1="0.926" y1="0.494" x2="0.078" y2="0.505" xlink:href="#linear-gradient"/>
+    <linearGradient id="linear-gradient-3" x1="1.006" y1="0.493" x2="-0.008" y2="0.505" xlink:href="#linear-gradient"/>
+  </defs>
+  <g id="Layer_x0020_1" transform="translate(1 -4)">
+    <rect id="Rectangle_4" data-name="Rectangle 4" width="1173" height="711" transform="translate(-1 4)" fill="none"/>
+    <g id="_522328360" transform="translate(90.676 195.501)">
+      <g id="Group_3" data-name="Group 3" transform="translate(643.771 0)">
+        <ellipse id="Ellipse_7" data-name="Ellipse 7" cx="38.5" cy="38" rx="38.5" ry="38" transform="translate(-0.447 9.499)" fill="url(#linear-gradient)"/>
+        <ellipse id="Ellipse_8" data-name="Ellipse 8" cx="38.5" cy="38" rx="38.5" ry="38" transform="translate(203.553 7.499)" fill="url(#linear-gradient-2)"/>
+        <ellipse id="Ellipse_9" data-name="Ellipse 9" cx="48.5" cy="47.5" rx="48.5" ry="47.5" transform="translate(92.553 0.499)" fill="url(#linear-gradient-3)"/>
+      </g>
+      <text id="Skuare" transform="translate(0.324 292.499)" font-size="295" font-family="Arial-BoldMT, Arial" font-weight="700"><tspan x="0" y="0">Skuare</tspan></text>
+    </g>
+  </g>
+</svg>

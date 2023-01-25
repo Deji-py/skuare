@@ -1,0 +1,10 @@
+.right {
+  background-color: rgb(219, 219, 219);
+  width: 0em;
+  transition: ease 0.2s;
+}
+
+.left {
+  background-color: white;
+  flex: 1;
+}
