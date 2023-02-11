@@ -6,7 +6,7 @@ import { FaCommentDots, FaEye, FaHeart, FaShare } from "react-icons/fa"
 import { MdCircle } from 'react-icons/md'
 import theme from '../Context/themeContext'
 
-function PostCard() {
+function PostCard({ image, caption, username }) {
     return (
 
         <div className='flex flex-col justify-center gap-2 p-3 items-start w-[95%] h-[400px] shadow-2xl backdrop-blur-2xl  shadow-[#5f585c3f] rounded-[10px] bg-[#ffffff] ' style={{
@@ -15,7 +15,7 @@ function PostCard() {
             <header className='h-fit w-full flex flex-row justify-between items-center'>
                 <div className="flex flex-row gap-3 justify-start items-center">
                     <div className='w-[40px] h-[40px] overflow-hidden bg-gray-300 rounded-[10px]'>
-                        <img src={img2} alt="profilePic" style={{
+                        <img src={image} alt="profilePic" style={{
                             width: "100%",
                             height: "100%",
                             objectFit: "cover",
@@ -23,7 +23,7 @@ function PostCard() {
                         }} />
                     </div>
                     <div>
-                        <h3 className='truncate w-[150px] text-[14px] font-bold'>Adewale Michael </h3>
+                        <h3 className='truncate w-[150px] text-[14px] font-bold'>{username} </h3>
                         <p className='text-[10px] flex flex-row justify-start items-center'> Lagos, Nigeria</p>
                     </div>
                 </div>
@@ -46,7 +46,7 @@ function PostCard() {
                 </div>
             </header>
             <div className='flex-1 overflow-hidden bg-gray-200 rounded-tr-2xl rounded-bl-2xl w-full'>
-                <img src={img} alt="image" style={{
+                <img src={image} alt="image" style={{
                     width: "100%",
                     height: "100%",
                     objectFit: "cover",
@@ -60,7 +60,7 @@ function PostCard() {
 
                 </div>
                 <blockquote className='text-[12px]'>
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Nihil vero fugit numquam distinctio reprehenderit rem vitae, corporis iusto. Illo, placeat? Voluptas consequatur placeat rem error quos. Nobis fugit quidem sit.
+                    {caption}
                 </blockquote>
             </div>
             <footer className=' h-fit w-full flex flex-row justify-between items-center'>

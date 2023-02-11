@@ -5,36 +5,38 @@ import StyledInput from '../../components/StyledInput'
 import logo from "../../Assets/svg/skuacolored.svg"
 import Googlelogo from "../../Assets/svg/Googlelogo.svg"
 import { browserSessionPersistence, GoogleAuthProvider, setPersistence, signInWithPopup } from "firebase/auth"
-import auth from '../../firebse_config'
+import { auth, db } from '../../firebse_config'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { Authenticator } from '../../Context/firebaseContext'
-
+import { collection, addDoc, setDoc, doc } from 'firebase/firestore'
 
 
 function Signup() {
 
     const navigate = useNavigate()
-    const currentUser = useContext(Authenticator)
     const provider = new GoogleAuthProvider()
 
 
 
     const handleGoogleSignin = () => {
-        console.log("hello");
         signInWithPopup(auth, provider).then(result => {
-            const credential = GoogleAuthProvider.credentialFromResult(result)
+            // const credential = GoogleAuthProvider.credentialFromResult(result)
             navigate("/dashboard/home")
+            setDoc(doc(db, "users", result.user.uid), {
+                posts: [{
+                    caption: "Hello my people",
+                    image: result.user.photoURL,
+                }],
+                bio: "",
+                profilePic: result.user.photoURL
+            })
+
         }).catch(err => {
             console.log(err);
-            const crediential = GoogleAuthProvider.credentialFromError(err)
+            // const crediential = GoogleAuthProvider.credentialFromError(err)
         })
     }
 
-    useEffect(() => {
-        if (currentUser.user !== null) {
-            navigate("/dashboard/home")
-        }
-    }, [])
 
 
 

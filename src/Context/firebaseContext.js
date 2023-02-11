@@ -1,7 +1,7 @@
 import { onAuthStateChanged } from "firebase/auth";
 import { useEffect, useState } from "react";
 import { createContext } from "react";
-import auth from "../firebse_config";
+import { auth } from "../firebse_config";
 
 const Authenticator = createContext();
 
@@ -19,8 +19,8 @@ const AuthProvider = (props) => {
   });
 
   return (
-    <Authenticator.Provider value={{ user: currentUser, loading: loading }}>
-      {props.children}
+    <Authenticator.Provider value={currentUser}>
+      <>{props.children}</>
     </Authenticator.Provider>
   );
 };

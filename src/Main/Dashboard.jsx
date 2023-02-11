@@ -15,15 +15,10 @@ import { Authenticator } from '../Context/firebaseContext'
 
 function Dashboard() {
 
-    const currentUser = useContext(Authenticator)
-    const navigate = useNavigate()
+    // const currentUser = useContext(Authenticator)
+    // const navigate = useNavigate()
 
-
-    useEffect(() => {
-        if (currentUser.user === null) {
-            navigate("/Login")
-        }
-    }, [])
+    
 
     return (
         <div className='flex-column ' style={{

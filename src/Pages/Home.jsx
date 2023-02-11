@@ -1,5 +1,5 @@
 import { Avatar, IconButton } from '@mui/material'
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { HiMenuAlt3, HiMoon, HiSun, HiUserGroup } from 'react-icons/hi'
 import logo from '../Assets/svg/skuacolored.svg'
 import Navbar from '../components/Navbar'
@@ -11,9 +11,12 @@ import lady3 from "../Assets/png/lady3.jpg"
 import './home.css'
 import PostCard from '../components/PostCard'
 import { useAuthState } from 'react-firebase-hooks/auth'
-import auth from '../firebse_config'
+import auth, { db } from '../firebse_config'
 import { useNavigate } from 'react-router-dom'
 import { onAuthStateChanged } from 'firebase/auth'
+import CustomButton from '../components/CustomButton'
+import { Authenticator } from '../Context/firebaseContext'
+import { doc, getDoc } from 'firebase/firestore'
 
 
 
@@ -41,15 +44,49 @@ const StoryCard = ({ image }) => {
 function Home() {
 
 
+    const currentUser = useContext(Authenticator)
 
     const [open, setOpen] = useState(false)
+    const [posts, setPosts] = useState(null)
 
     const toggleSidebar = () => {
         setOpen(!open)
     }
+
+
+
+
+    const fetchPost = async () => {
+
+        if (currentUser === null) {
+            console.log("loading")
+        }
+        else {
+            const docRef = doc(db, "users", currentUser.uid)
+            const user = await getDoc(docRef)
+            if (user.exists()) {
+                setPosts(user.data())
+            }
+            else {
+
+                console.log("User post not Found")
+
+                console.log(posts)
+            }
+
+        }
+    }
+
+
+    useEffect(() => {
+        fetchPost()
+
+    }, [currentUser])
+
     return (
         <>
             <div >
+
                 <Navbar >
                     <div className='flex-between ' style={{
                         width: "100%",
@@ -79,100 +116,78 @@ function Home() {
 
                     </div>
                 </Navbar>
-                <div className='flex flex-col-reverse pb-20 overflow-hidden'>
-                    <div className='h-full '>
-                        <ScrollView style={{
-                            height: "fit-content",
-                            width: "100vw"
-                        }}>
-                            <div className='flex pt-2  flex-row justify-between w-fit'>
-                                <StoryCard image={lady} />
-                                <StoryCard image={lady2} />
-                                <StoryCard image={lady3} />
-                                <StoryCard image={lady} />
-                                <StoryCard image={lady3} />
-                                <StoryCard image={lady} />
-                                <StoryCard image={lady2} />
-                                <StoryCard image={lady3} />
-                                <StoryCard image={lady} />
-                                <StoryCard image={lady3} />
-                                <p>Story</p>
-                                <p>Story</p>
-                                <p>Story</p>
-                                <p>Story</p>
-                                <p>Story</p>
-                                <p>Story</p>
-                                <p>Story</p>
-                                <p>Story</p>
-                                <p>Story</p>
-                                <p>Story</p>
-                                <p>Story</p>
-                                <p>Story</p>
-                                <p>Story</p>
-                                <p>Story</p>
-                                <p>Story</p>
-                                <p>Story</p>
-                                <p>Story</p>
-                                <p>Story</p>
-                                <p>Story</p>
-                                <p>Story</p>
-                                <p>Story</p>
-                                <p>Story</p>
-                                <p>Story</p>
-                                <p>Story</p>
-                                <p>Story</p>
-                                <p>Story</p>
-                                <p>Story</p>
-                                <p>Story</p>
-                                <p>Story</p>
-                                <p>Story</p>
-                                <p>Story</p>
-                                <p>Story</p>
-                                <p>Story</p>
-                                <p>Story</p>
-                                <p>Story</p>
-                                <p>Story</p>
-                                <p>Story</p>
-                                <p>Story</p>
-                            </div>
 
-                        </ScrollView>
-                        <div className='flex flex-col  justify-center items-center gap-5 py-5'>
-                            <PostCard />
-                            <PostCard />
-                            <PostCard />
-                            <PostCard />
+                {currentUser === null ? (<div>Loading</div>) : (
+
+                    <div className='flex flex-col-reverse pb-20 overflow-hidden'>
+                        <div className='h-full '>
+                            <ScrollView style={{
+                                height: "fit-content",
+                                width: "100vw"
+                            }}>
+                                <div className='flex pt-2  flex-row justify-between w-fit'>
+                                    {/* <StoryCard image={lady} />
+                            <StoryCard image={lady2} />
+                            <StoryCard image={lady3} />
+                            <StoryCard image={lady} />
+                            <StoryCard image={lady3} />
+                            <StoryCard image={lady} />
+                            <StoryCard image={lady2} />
+                            <StoryCard image={lady3} />
+                            <StoryCard image={lady} />
+                            <StoryCard image={lady3} /> */}
+                                    No Stories Yet
+                                </div>
+
+                            </ScrollView>
+                            <div className='flex flex-col  justify-center items-center gap-5 py-5'>
+                                {posts === null ? (<div />) : (
+
+                                    <div>
+                                        {posts.posts.map((item, key) => (
+                                            <PostCard image={item.image} caption={item.caption} username={currentUser.displayName} key={key} />
+                                        ))}
+
+                                    </div>
+                                )}
+
+                                No post Yet...Fetching Posts
+                                <CustomButton title={"Create First Post"} />
+                                <CustomButton title={"Find Friends"} />
+                            </div>
+                        </div>
+                        <div className=' w-full h-[4em] bg-gray-200 overflow-hidden' style={{
+                            height: open ? "5em" : "0em",
+                            transition: "ease 0.1s"
+                        }}>
+                            <ScrollView style={{
+                                height: "fit-content",
+                                width: "100vw"
+                            }}>
+                                <div className='flex pt-2  flex-row justify-between w-fit'>
+                                    <StoryCard image={lady} />
+                                    <StoryCard image={lady} />
+                                    <StoryCard image={lady} />
+                                    <StoryCard image={lady} />
+                                    <StoryCard image={lady} />
+                                    <StoryCard image={lady} />
+                                    <StoryCard image={lady} />
+                                    <StoryCard image={lady} />
+                                    <p>Story</p>
+                                    <p>Story</p>
+                                    <p>Story</p>
+                                    <p>Story</p>
+                                    <p>Story</p>
+                                    <p>Story</p>
+                                    <p>Story</p>
+                                    <p>Story</p>
+                                </div>
+                            </ScrollView>
                         </div>
                     </div>
-                    <div className=' w-full h-[4em] bg-gray-200 overflow-hidden' style={{
-                        height: open ? "5em" : "0em",
-                        transition: "ease 0.1s"
-                    }}>
-                        <ScrollView style={{
-                            height: "fit-content",
-                            width: "100vw"
-                        }}>
-                            <div className='flex pt-2  flex-row justify-between w-fit'>
-                                <StoryCard image={lady} />
-                                <StoryCard image={lady} />
-                                <StoryCard image={lady} />
-                                <StoryCard image={lady} />
-                                <StoryCard image={lady} />
-                                <StoryCard image={lady} />
-                                <StoryCard image={lady} />
-                                <StoryCard image={lady} />
-                                <p>Story</p>
-                                <p>Story</p>
-                                <p>Story</p>
-                                <p>Story</p>
-                                <p>Story</p>
-                                <p>Story</p>
-                                <p>Story</p>
-                                <p>Story</p>
-                            </div>
-                        </ScrollView>
-                    </div>
-                </div>
+                )}
+
+
             </div>
         </>
     )
