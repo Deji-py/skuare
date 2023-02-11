@@ -20,17 +20,12 @@ function Signup() {
 
     const handleGoogleSignin = () => {
         signInWithPopup(auth, provider).then(result => {
-            // const credential = GoogleAuthProvider.credentialFromResult(result)
-            navigate("/dashboard/home")
             setDoc(doc(db, "users", result.user.uid), {
-                posts: [{
-                    caption: "Hello my people",
-                    image: result.user.photoURL,
-                }],
+                posts: [],
                 bio: "",
                 profilePic: result.user.photoURL
             })
-
+            navigate("/dashboard/home")
         }).catch(err => {
             console.log(err);
             // const crediential = GoogleAuthProvider.credentialFromError(err)

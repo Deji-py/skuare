@@ -48,6 +48,7 @@ function Home() {
 
     const [open, setOpen] = useState(false)
     const [posts, setPosts] = useState(null)
+    const navigate = useNavigate()
 
     const toggleSidebar = () => {
         setOpen(!open)
@@ -70,8 +71,6 @@ function Home() {
             else {
 
                 console.log("User post not Found")
-
-                console.log(posts)
             }
 
         }
@@ -126,16 +125,7 @@ function Home() {
                                 width: "100vw"
                             }}>
                                 <div className='flex pt-2  flex-row justify-between w-fit'>
-                                    {/* <StoryCard image={lady} />
-                            <StoryCard image={lady2} />
-                            <StoryCard image={lady3} />
-                            <StoryCard image={lady} />
-                            <StoryCard image={lady3} />
-                            <StoryCard image={lady} />
-                            <StoryCard image={lady2} />
-                            <StoryCard image={lady3} />
-                            <StoryCard image={lady} />
-                            <StoryCard image={lady3} /> */}
+
                                     No Stories Yet
                                 </div>
 
@@ -143,7 +133,7 @@ function Home() {
                             <div className='flex flex-col  justify-center items-center gap-5 py-5'>
                                 {posts === null ? (<div />) : (
 
-                                    <div>
+                                    <div className='flex flex-col-reverse justify-center items-center gap-5 py-5'>
                                         {posts.posts.map((item, key) => (
                                             <PostCard image={item.image} caption={item.caption} username={currentUser.displayName} key={key} />
                                         ))}
@@ -151,9 +141,17 @@ function Home() {
                                     </div>
                                 )}
 
-                                No post Yet...Fetching Posts
-                                <CustomButton title={"Create First Post"} />
-                                <CustomButton title={"Find Friends"} />
+
+                                <div>
+
+                                    No post Yet...Fetching Posts
+                                    <div onClick={() => navigate("/dashboard/post")}>
+                                        <CustomButton title={"Create First Post"} />
+                                    </div>
+                                    <CustomButton title={"Find Friends"} />
+                                </div>
+
+
                             </div>
                         </div>
                         <div className=' w-full h-[4em] bg-gray-200 overflow-hidden' style={{

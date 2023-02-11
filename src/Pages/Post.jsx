@@ -1,38 +1,73 @@
-import { Alert } from '@mui/material'
-import React, { useState } from 'react'
+import { Alert, CircularProgress } from '@mui/material'
+import React, { useContext, useState } from 'react'
 import { MdError, MdHourglassEmpty } from 'react-icons/md'
 import CustomButton from '../components/CustomButton'
 import ModalPopup from '../components/ModalPopup'
 import { useNavigate } from 'react-router-dom'
+import { db, storage } from '../firebse_config'
+import { arrayUnion, doc, setDoc, updateDoc } from 'firebase/firestore'
+import { Authenticator } from '../Context/firebaseContext'
+import { getDownloadURL, ref, uploadBytes } from 'firebase/storage'
+import { v4 } from 'uuid'
 
 function Post() {
     const [showPopup, setShowPopUp] = useState(false)
     const [postText, setPostText] = useState("")
-    const [postImage, setPostImage] = useState("")
+    const [postImagePreview, setPostImagePreview] = useState("")
+    const [postImage, setPostImage] = useState(null)
     const [imageError, setImageError] = useState(false)
-    const [uploading, setUploading] = useState(false)
+    const [uploadComplete, setUploadComplete] = useState(true)
     const navigate = useNavigate()
 
+    const currentUser = useContext(Authenticator)
 
-    
+
     const handleUpload = (e) => {
         if (e.target.files[0].type === "image/png" || e.target.files[0].type === "image/jpg" || e.target.files[0].type === "image/jpeg") {
             setImageError(false)
-            setPostImage(URL.createObjectURL(e.target.files[0]))
+            setPostImage(e.target.files[0])
+            setPostImagePreview(URL.createObjectURL(e.target.files[0]))
         }
         else {
+            setPostImage(null)
             setImageError(true)
-            setPostImage("")
+            setPostImagePreview("")
         }
     }
 
 
 
 
+
     const StartUpload = async () => {
         setShowPopUp(false)
-        console.log("posted")
-        navigate("/dashboard/profile")
+        if (currentUser === null) {
+            console.log("loading")
+        } else {
+
+            if (postImage === null) return;
+            const imageRef = ref(storage, `images/${postImage + v4()}`)
+            setUploadComplete(false)
+            uploadBytes(imageRef, postImage).then(() => {
+                getDownloadURL(imageRef).then((url) => {
+                    updateDoc(doc(db, "users", currentUser.uid), {
+                        posts: arrayUnion(
+                            {
+                                caption: postText,
+                                image: url
+                            }
+                        ),
+                        bio: "",
+                        profilePic: currentUser.photoURL
+                    })
+                    console.log("posted")
+                    setUploadComplete(true)
+                    navigate("/dashboard/home")
+
+                })
+            }).catch((e) => console.log(e))
+
+        }
 
     }
 
@@ -52,7 +87,7 @@ function Post() {
                     }} onChange={(e) => handleUpload(e)} />
 
 
-                    {postImage !== "" && (<img className='mt-5' src={postImage} style={{
+                    {postImagePreview !== "" && (<img className='mt-5' src={postImagePreview} style={{
                         width: 100,
                         height: 100,
                         objectFit: "cover"
@@ -65,7 +100,7 @@ function Post() {
                 <CustomButton title={"Post"} />
             </div>
             {
-                postText === "" || postImage === "" ? (<ModalPopup active={showPopup} setActive={setShowPopUp}>
+                postText === "" || postImagePreview === "" ? (<ModalPopup active={showPopup} setActive={setShowPopUp}>
                     <div className='w-[20em]  h-fit py-5 flex flex-col justify-center items-center '>
                         <MdHourglassEmpty size={30} className={"text-red-500"} />
                         <h1 className='mt-2 font-bold text-red-500'>Pls Fill up the Post Form !!</h1>
@@ -89,7 +124,17 @@ function Post() {
                     </div>
                 </ModalPopup>)
             }
-
+            {uploadComplete === false && (
+                <ModalPopup active={true}>
+                    <div className='w-fit h-fit p-5 flex flex-col justify-center items-center
+                    '>
+                        <CircularProgress />
+                        <p>
+                            Uploading
+                        </p>
+                    </div>
+                </ModalPopup>
+            )}
         </div>
     )
 }
